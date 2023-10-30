@@ -6,7 +6,6 @@ import Education from './Pages/Education/Education'
 import Experience from './Pages/Experience/Experience' 
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
