@@ -11,14 +11,14 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route path='/' element={<Personal/>}/>
-          <Route path='/experience' element={<Education/>}/>
-          <Route path='/education' element={<Experience/>}/>
-          <Route path='/resume'/>
+          <Route path="/" element={<Personal />} />
+          <Route path="/experience" element={<Experience />} />
+          <Route path="/education" element={<Education />} />
+          <Route path="/resume" />
         </Routes>
       </Router>
     </>
-  )
+  );
 }
 
 export default App
