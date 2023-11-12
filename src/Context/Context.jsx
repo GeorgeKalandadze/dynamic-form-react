@@ -7,6 +7,8 @@ const AppContext = createContext({});
 const resumeInfo = {
   name: "",
   surname: "",
+  about_me: "",
+  image: "",
   email: "",
   phone_number: "",
   experiences: [
@@ -20,14 +22,13 @@ const resumeInfo = {
   ],
   educations: [
     {
+      start_date: "",
       institute: "",
       due_date: "",
       description: "",
       degree_id: "",
     },
   ],
-  image: "",
-  about_me: "",
 };
 
 
@@ -61,12 +62,19 @@ export const AppProvider = ({children}) => {
       }
     };
 
+     const handleChange = ( event ) => {
+       const name = event.target.name;
+       const value = event.target.value;
+       setInfo((formData) => ({ ...formData, [name]: value }));
+     };
+
 
     return (
       <AppContext.Provider
         value={{
           info,
-          handleAddClick
+          handleAddClick,
+          handleChange
         }}
       >
         {children}

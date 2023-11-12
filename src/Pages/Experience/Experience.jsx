@@ -2,42 +2,54 @@ import React from 'react'
 import InputGroup from '../../Components/InputGroup';
 import TextareaGroup from '../../Components/TextareaGroup';
 import Dropdown from '../../Components/Dropdown';
+import { useGlobalContext } from '../../Context/Context';
 
 const Experience = () => {
-  const options = [
-    { label: "Option 1", value: "option1" },
-    { label: "Option 2", value: "option2" },
-    { label: "Option 3", value: "option3" },
-  ];
+  const { info, handleAddClick } = useGlobalContext();
 
-  const handleSelect = (selectedOption) => {
-    // Do something with the selected option
-    console.log("Selected Option:", selectedOption);
-  };
   return (
     <div className="bg-white px-[200px] py-[20px]">
       <div className=" bg-[#f9f9f9] py-[20px] px-[30px] w-full h-full rounded flex flex-col gap-8">
-        <InputGroup
-          name="position"
-          label="თანამდებობა"
-          placeholder="დეველოპერი, დიზაინერი, ა.შ."
-          error="მინიმუმ 2 სიმბოლო"
-        />
-        <InputGroup
-          name="employer"
-          label="დამსაქმებელი"
-          placeholder="დამსაქმებელი"
-          error="მინიმუმ 2 სიმბოლო"
-        />
-        <InputGroup type="date" name="start_date" label="დაწყების რიცხვი" />
-        <InputGroup type="date" name="end_date" label="დამთავრების რიცხვი" />
-        <Dropdown options={options} onSelect={handleSelect} />
-        <TextareaGroup
-          label="აღწერა"
-          placeholder="როლი თანამდებობაზე და ზოგადი აღწერა"
-        />
+        {info.experiences.map((x, i) => (
+          <div className="flex flex-col gap-8">
+            <InputGroup
+              name="position"
+              label="თანამდებობა"
+              placeholder="დეველოპერი, დიზაინერი, ა.შ."
+              error="მინიმუმ 2 სიმბოლო"
+              value={x.position}
+            />
+            <InputGroup
+              name="employer"
+              label="დამსაქმებელი"
+              placeholder="დამსაქმებელი"
+              error="მინიმუმ 2 სიმბოლო"
+              value={x.empolyer}
+            />
+            <InputGroup
+              type="date"
+              name="start_date"
+              label="დაწყების რიცხვი"
+              value={x.start_date}
+            />
+            <InputGroup
+              type="date"
+              name="due_date"
+              label="დამთავრების რიცხვი"
+              value={x.due_date}
+            />
+            <TextareaGroup
+              label="აღწერა"
+              placeholder="როლი თანამდებობაზე და ზოგადი აღწერა"
+              value={x.description}
+            />
+          </div>
+        ))}
         <div className="flex justify-start">
-          <button className="bg-[#62a1eb] rounded text-white px-4 py-3">
+          <button
+            onClick={() => handleAddClick("experience")}
+            className="bg-[#62a1eb] rounded text-white px-4 py-3"
+          >
             მეტი გამოცდილების დამატება
           </button>
         </div>

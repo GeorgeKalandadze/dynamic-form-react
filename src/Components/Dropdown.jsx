@@ -37,7 +37,7 @@ const Dropdown = ({ options, onSelect }) => {
         />
       </div>
       {isOpen && (
-        <ul className="absolute bg-white w-full left-0  shadow-md rounded-b-lg">
+        <ul className="absolute bg-white w-full left-0 shadow-lg rounded-b-lg">
           {options.map((option) => (
             <li
               key={option.value}
