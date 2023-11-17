@@ -69,12 +69,33 @@ export const AppProvider = ({children}) => {
      };
 
 
+
+     const handleInputChange = (event, index, type) => {
+       const { name, value } = event.target;
+       let arrayToUpdate;
+       if (type === "experience") {
+         arrayToUpdate = [...info.experiences];
+       } else if (type === "education") {
+         arrayToUpdate = [...info.educations];
+       }
+       arrayToUpdate[index] = { ...arrayToUpdate[index], [name]: value };
+
+       if (type === "experience") {
+         setInfo({ ...info, experiences: arrayToUpdate });
+       } else if (type === "education") {
+         setInfo({ ...info, educations: arrayToUpdate });
+       }
+     };
+
+
     return (
       <AppContext.Provider
         value={{
           info,
           handleAddClick,
-          handleChange
+          handleChange,
+          handleInputChange,
+          setInfo,
         }}
       >
         {children}

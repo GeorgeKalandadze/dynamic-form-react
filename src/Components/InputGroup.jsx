@@ -1,5 +1,7 @@
-import React from 'react'
-import { useGlobalContext } from '../Context/Context'
+// InputGroup.js
+import React from "react";
+import ErrorIcon from "../assets/error-icon.png";
+import SuccessIcon from "../assets/success-icon.png";
 
 const InputGroup = ({
   label,
@@ -7,24 +9,44 @@ const InputGroup = ({
   placeholder,
   name,
   value,
-  error,
+  hint,
   changeHandler,
+  validation,
 }) => {
-   const { info, handleChange } = useGlobalContext();
   return (
     <div className="flex flex-col gap-3">
       <label className="font-medium">{label}</label>
-      <input
-        type={type}
-        placeholder={placeholder}
-        name={name}
-        value={value}
-        className="outline-none py-3 rounded px-3"
-        onChange={(event) => handleChange(event)}
-      />
-      <p className="font-small">{error}</p>
+      <div className="relative">
+        <input
+          type={type}
+          placeholder={placeholder}
+          name={name}
+          value={value}
+          className={`outline-none py-3 rounded px-3 w-full ${
+            validation === "invalid" ? "border-red-500" : ""
+          }`}
+          onChange={(event) => changeHandler(event)}
+        />
+        <img
+          src={
+            validation === "valid"
+              ? SuccessIcon
+              : validation === "invalid"
+              ? ErrorIcon
+              : ""
+          }
+          className="absolute top-3 right-3"
+        />
+      </div>
+      <p
+        className={`font-small ${
+          validation === "invalid" ? "text-red-500" : ""
+        }`}
+      >
+        {hint}
+      </p>
     </div>
   );
 };
 
-export default InputGroup
+export default InputGroup;

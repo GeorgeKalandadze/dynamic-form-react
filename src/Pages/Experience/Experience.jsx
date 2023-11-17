@@ -5,8 +5,7 @@ import Dropdown from '../../Components/Dropdown';
 import { useGlobalContext } from '../../Context/Context';
 
 const Experience = () => {
-  const { info, handleAddClick } = useGlobalContext();
-
+  const { info, handleAddClick, handleInputChange } = useGlobalContext();
   return (
     <div className="bg-white px-[200px] py-[20px]">
       <div className=" bg-[#f9f9f9] py-[20px] px-[30px] w-full h-full rounded flex flex-col gap-8">
@@ -16,32 +15,38 @@ const Experience = () => {
               name="position"
               label="თანამდებობა"
               placeholder="დეველოპერი, დიზაინერი, ა.შ."
-              error="მინიმუმ 2 სიმბოლო"
+              hint="მინიმუმ 2 სიმბოლო"
               value={x.position}
+              changeHandler={(e) => handleInputChange(e, i, "experience")}
             />
             <InputGroup
               name="employer"
               label="დამსაქმებელი"
               placeholder="დამსაქმებელი"
-              error="მინიმუმ 2 სიმბოლო"
-              value={x.empolyer}
+              hint="მინიმუმ 2 სიმბოლო"
+              value={x.employer}
+              changeHandler={(e) => handleInputChange(e, i, "experience")}
             />
             <InputGroup
               type="date"
               name="start_date"
               label="დაწყების რიცხვი"
               value={x.start_date}
+              changeHandler={(e) => handleInputChange(e, i, "experience")}
             />
             <InputGroup
               type="date"
               name="due_date"
               label="დამთავრების რიცხვი"
               value={x.due_date}
+              changeHandler={(e) => handleInputChange(e, i, "experience")}
             />
             <TextareaGroup
+              name="description"
               label="აღწერა"
               placeholder="როლი თანამდებობაზე და ზოგადი აღწერა"
               value={x.description}
+              changeHandler={(e) => handleInputChange(e, i, "experience")}
             />
           </div>
         ))}

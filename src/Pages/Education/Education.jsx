@@ -5,7 +5,7 @@ import { useGlobalContext } from '../../Context/Context';
 import Dropdown from '../../Components/Dropdown';
 
 const Education = () => {
-  const { info, handleAddClick} = useGlobalContext();
+  const { info, handleAddClick, handleInputChange } = useGlobalContext();
 
   const options = [
     { label: "Option 1", value: "option1" },
@@ -20,11 +20,12 @@ const Education = () => {
         {info.educations.map((x, i) => (
           <div className="flex flex-col gap-8">
             <InputGroup
-              name=""
+              name="institute"
               label="სასწავლებელი"
               placeholder="სასწავლებელი"
-              error="მინიმუმ 2 სიმბოლო"
+              hint="მინიმუმ 2 სიმბოლო"
               value={x.institute}
+              changeHandler={(e) => handleInputChange(e, i, "education")}
             />
             <Dropdown options={options} onSelect={handleSelect} />
             <InputGroup
@@ -32,17 +33,20 @@ const Education = () => {
               name="start_date"
               label="დაწყების რიცხვი"
               value={x.start_date}
+              changeHandler={(e) => handleInputChange(e, i, "education")}
             />
             <InputGroup
               type="date"
               name="due_date"
               label="დამთავრების რიცხვი"
               value={x.due_date}
+              changeHandler={(e) => handleInputChange(e, i, "education")}
             />
             <TextareaGroup
               label="აღწერა"
               placeholder="როლი თანამდებობაზე და ზოგადი აღწერა"
               value={x.description}
+              changeHandler={(e) => handleInputChange(e, i, "education")}
             />
           </div>
         ))}
