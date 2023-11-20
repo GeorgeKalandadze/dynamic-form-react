@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import ArrowDownIcon from "../assets/arrow-down.png";
 
-const Dropdown = ({ options, onSelect }) => {
-  const [selectedOption, setSelectedOption] = useState(null);
+const Dropdown = ({ options, handleChange, value, validation }) => {
+  const [selectedOption, setSelectedOption] = useState(value);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleToggle = () => {
@@ -12,19 +12,26 @@ const Dropdown = ({ options, onSelect }) => {
   const handleSelect = (option) => {
     setSelectedOption(option);
     setIsOpen(false);
-    onSelect(option);
+    handleChange(option.label);
   };
 
+  console.log(value);
   return (
     <div
-      className={`bg-white py-3 px-3 rounded relative ${isOpen ? "open" : ""}`}
+      className={`bg-white py-3 px-3 rounded z-10 relative ${isOpen ? "open" : ""} ${
+          validation === "invalid"
+            ? "border-[1px] border-red-500"
+            : validation === "valid"
+            ? "border-[1px] border-green-500"
+            : ""
+        }`}
     >
       <div
         className={`bg-white flex items-center cursor-pointer justify-between`}
         onClick={handleToggle}
       >
         {selectedOption ? (
-          <h1 className="font-medium">{selectedOption.label}</h1>
+          <h1 className="font-medium">{value}</h1>
         ) : (
           <h1 className="font-medium">აირჩიეთ ხარისხი</h1>
         )}

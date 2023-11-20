@@ -1,11 +1,49 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import InputGroup from '../../Components/InputGroup';
 import TextareaGroup from '../../Components/TextareaGroup';
 import Dropdown from '../../Components/Dropdown';
 import { useGlobalContext } from '../../Context/Context';
+import { validateExperiences } from '../../Validation/Validation';
 
 const Experience = () => {
-  const { info, handleAddClick, handleInputChange } = useGlobalContext();
+  const {
+    setInfo,
+    info,
+    handleAddClick,
+    setValidationErrors,
+    validationErrors,
+  } = useGlobalContext();
+
+
+  const handleExperienceChange = (event, index, field) => {
+    const { value } = event.target;
+    const updatedExperiences = [...info.experiences];
+    updatedExperiences[index][field] = value;
+
+    setInfo((formData) => ({
+      ...formData,
+      experiences: updatedExperiences,
+    }));
+
+    const errors = validateExperiences(updatedExperiences);
+    setValidationErrors((prevErrors) => ({
+      ...prevErrors,
+      experiences: errors,
+    }));
+  };
+
+  const onSubmit = () => {
+    
+    const errors = validateExperiences(info.experiences);
+    setValidationErrors((prevErrors) => ({
+      ...prevErrors,
+      experiences: errors,
+    }));
+    validateExperiences(info.experiences);
+  }
+
+
+
   return (
     <div className="bg-white px-[200px] py-[20px]">
       <div className=" bg-[#f9f9f9] py-[20px] px-[30px] w-full h-full rounded flex flex-col gap-8">
@@ -17,7 +55,8 @@ const Experience = () => {
               placeholder="დეველოპერი, დიზაინერი, ა.შ."
               hint="მინიმუმ 2 სიმბოლო"
               value={x.position}
-              changeHandler={(e) => handleInputChange(e, i, "experience")}
+              changeHandler={(e) => handleExperienceChange(e, i, "position")}
+              validation={validationErrors?.experiences?.[i]?.position}
             />
             <InputGroup
               name="employer"
@@ -25,28 +64,32 @@ const Experience = () => {
               placeholder="დამსაქმებელი"
               hint="მინიმუმ 2 სიმბოლო"
               value={x.employer}
-              changeHandler={(e) => handleInputChange(e, i, "experience")}
+              changeHandler={(e) => handleExperienceChange(e, i, "employer")}
+              validation={validationErrors?.experiences?.[i]?.employer}
             />
             <InputGroup
               type="date"
               name="start_date"
               label="დაწყების რიცხვი"
               value={x.start_date}
-              changeHandler={(e) => handleInputChange(e, i, "experience")}
+              changeHandler={(e) => handleExperienceChange(e, i, "start_date")}
+              validation={validationErrors?.experiences?.[i]?.start_date}
             />
             <InputGroup
               type="date"
               name="due_date"
               label="დამთავრების რიცხვი"
               value={x.due_date}
-              changeHandler={(e) => handleInputChange(e, i, "experience")}
+              changeHandler={(e) => handleExperienceChange(e, i, "due_date")}
+              validation={validationErrors?.experiences?.[i]?.due_date}
             />
             <TextareaGroup
               name="description"
               label="აღწერა"
               placeholder="როლი თანამდებობაზე და ზოგადი აღწერა"
               value={x.description}
-              changeHandler={(e) => handleInputChange(e, i, "experience")}
+              changeHandler={(e) => handleExperienceChange(e, i, "description")}
+              validation={validationErrors?.experiences?.[i]?.description}
             />
           </div>
         ))}
@@ -62,7 +105,10 @@ const Experience = () => {
           <button className="bg-[#6b40e3] rounded text-white px-4 py-3">
             უკან
           </button>
-          <button className="bg-[#6b40e3] rounded text-white px-4 py-3">
+          <button
+            className="bg-[#6b40e3] rounded text-white px-4 py-3"
+            onClick={() => onSubmit()}
+          >
             შემდეგი
           </button>
         </div>

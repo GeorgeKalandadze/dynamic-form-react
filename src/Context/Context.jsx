@@ -34,6 +34,10 @@ const resumeInfo = {
 
 export const AppProvider = ({children}) => {
     const [info, setInfo] = useSessionStorage("resume-info", resumeInfo);
+    const [validationErrors, setValidationErrors] = useSessionStorage(
+      "errors",
+      {}
+    );
       
 
     const handleAddClick = (type) => {
@@ -70,32 +74,15 @@ export const AppProvider = ({children}) => {
 
 
 
-     const handleInputChange = (event, index, type) => {
-       const { name, value } = event.target;
-       let arrayToUpdate;
-       if (type === "experience") {
-         arrayToUpdate = [...info.experiences];
-       } else if (type === "education") {
-         arrayToUpdate = [...info.educations];
-       }
-       arrayToUpdate[index] = { ...arrayToUpdate[index], [name]: value };
-
-       if (type === "experience") {
-         setInfo({ ...info, experiences: arrayToUpdate });
-       } else if (type === "education") {
-         setInfo({ ...info, educations: arrayToUpdate });
-       }
-     };
-
-
     return (
       <AppContext.Provider
         value={{
           info,
           handleAddClick,
           handleChange,
-          handleInputChange,
           setInfo,
+          validationErrors,
+          setValidationErrors,
         }}
       >
         {children}

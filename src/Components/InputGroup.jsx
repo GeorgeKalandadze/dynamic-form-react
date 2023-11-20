@@ -13,18 +13,30 @@ const InputGroup = ({
   changeHandler,
   validation,
 }) => {
+  const inputClass = `outline-none py-3 rounded px-3 w-full ${
+    validation === "invalid"
+      ? "border-[1px] border-red-500"
+      : validation === "valid"
+      ? "border-[1px] border-green-500"
+      : ""
+  }`;
+
   return (
     <div className="flex flex-col gap-3">
-      <label className="font-medium">{label}</label>
+      <label
+        className={`font-medium ${
+          validation === "invalid" ? "text-red-500" : ""
+        }`}
+      >
+        {label}
+      </label>
       <div className="relative">
         <input
           type={type}
           placeholder={placeholder}
           name={name}
           value={value}
-          className={`outline-none py-3 rounded px-3 w-full ${
-            validation === "invalid" ? "border-red-500" : ""
-          }`}
+          className={inputClass}
           onChange={(event) => changeHandler(event)}
         />
         <img
@@ -35,7 +47,9 @@ const InputGroup = ({
               ? ErrorIcon
               : ""
           }
-          className="absolute top-3 right-3"
+          className={`absolute top-3 ${
+            type === "date" ? "right-[-3%]" : "right-3"
+          }`}
         />
       </div>
       <p

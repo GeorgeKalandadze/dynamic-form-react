@@ -1,20 +1,13 @@
 // Personal.js
-import React, { useEffect, useState } from "react";
+import React from "react";
 import InputGroup from "../../Components/InputGroup";
 import TextareaGroup from "../../Components/TextareaGroup";
 import { useGlobalContext } from "../../Context/Context";
 import { validatePersonal } from "../../Validation/Validation";
-import { useSessionStorage } from "../../Hooks/useSessionStorage";
 
 const Personal = () => {
-  const { info,setInfo} = useGlobalContext();
-  const [validationErrors, setValidationErrors] = useSessionStorage('errors',{
-    name: "",
-    surname: "",
-    email: "",
-    phone_number: "",
-  });
-
+  const { info, setInfo, validationErrors, setValidationErrors } = useGlobalContext();
+  
   const validateForm = () => {
     const errors = validatePersonal(info);
     setValidationErrors(errors);
@@ -24,23 +17,39 @@ const Personal = () => {
     validateForm();
   };
 
-
-  console.log(info.phone_number)
-
   const handleChange = (event) => {
-    const { name, value } = event.target;
+    const { name, value, files } = event.target;
 
-    setInfo((prevInfo) => ({
-      ...prevInfo,
-      [name]: value,
-    }));
+    if (name === "image" && files && files[0]) {
+      const selectedImage = files[0];
 
-    const errors = validatePersonal({ ...info, [name]: value });
-    setValidationErrors((prevErrors) => ({
-      ...prevErrors,
-      [name]: errors[name],
-    }));
+      setInfo((prevInfo) => ({
+        ...prevInfo,
+        image: selectedImage,
+      }));
+
+      const errors = validatePersonal(
+        { ...info, [name]: value },
+        selectedImage
+      );
+      setValidationErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: errors[name],
+      }));
+    } else {
+      setInfo((prevInfo) => ({
+        ...prevInfo,
+        [name]: value,
+      }));
+
+      const errors = validatePersonal({ ...info, [name]: value }, info.image);
+      setValidationErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: errors[name],
+      }));
+    }
   };
+
 
   return (
     <div className="bg-white px-[200px] py-[20px]">
@@ -63,6 +72,26 @@ const Personal = () => {
           changeHandler={handleChange}
           validation={validationErrors.surname}
         />
+        <div className="flex gap-16 items-center relative py-10">
+          <p
+            className={`font-semibold text-lg ${
+              validationErrors.image === "invalid" ? "text-red-500" : ""
+            }`}
+          >
+            პირადი ფოტოს ატვირთვა
+          </p>
+          <div className="relative">
+            <input
+              type="file"
+              name="image"
+              className="cursor-pointer absolute top-0 left-0 w-full h-full opacity-0"
+              onChange={handleChange}
+            />
+            <button className="cursor-pointer bg-[#0e80bf] text-white px-4 py-3 rounded max-w-full text-sm">
+              ატვირთვა
+            </button>
+          </div>
+        </div>
         <TextareaGroup
           label="ჩემ შესახებ (არასავალდებულო)"
           placeholder="ზოგადი ინფო შენს შესახებ"
