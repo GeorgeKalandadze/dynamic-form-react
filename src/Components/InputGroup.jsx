@@ -48,7 +48,7 @@ const InputGroup = ({
               : ""
           }
           className={`absolute top-3 ${
-            type === "date" ? "right-[-3%]" : "right-3"
+            type === "date" ? "right-[-3.7%]" : "right-3"
           }`}
         />
       </div>
