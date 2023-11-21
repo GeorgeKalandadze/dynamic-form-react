@@ -23,15 +23,20 @@ const Personal = () => {
 
     if (name === "image" && files && files[0]) {
       const selectedImage = files[0];
-
+      const reader = new FileReader();
+      reader.readAsDataURL(selectedImage);
+      reader.onload = () => {
+      const dataUrl = reader.result;
       setInfo((prevInfo) => ({
         ...prevInfo,
-        image: selectedImage,
-      }));
+        image: dataUrl,
+        }));
+      };
+      
 
       const errors = validatePersonal(
         { ...info, [name]: value },
-        selectedImage
+        info.image
       );
       setValidationErrors((prevErrors) => ({
         ...prevErrors,
@@ -50,7 +55,6 @@ const Personal = () => {
       }));
     }
   };
-
 
   return (
     <FormLayout>

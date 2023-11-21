@@ -1,5 +1,5 @@
 // Validation.js
-export const validatePersonal = (values,image) => {
+export const validatePersonal = (values) => {
   const response = {
     name: "",
     surname: "",
@@ -44,17 +44,10 @@ export const validatePersonal = (values,image) => {
     response.phone_number = "valid";
   }
 
-   if (!image) {
+   if (!values.image) {
      response.image = "invalid";
-   } else {
-     const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
-     if (!allowedTypes.includes(image.type)) {
-       response.image = "invalid";
-     } else if (image.size > 5242880) {
-       response.image = "invalid";
-     } else {
+   }else{
        response.image = "valid";
-     }
    }
 
   return response;

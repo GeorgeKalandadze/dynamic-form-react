@@ -40,7 +40,11 @@ const Resume = () => {
             </div>
           )}
         </div>
-        <img src={PersonImg} className="rounded-full h-[246px] w-[246px]" />
+          <img
+            src={info?.image}
+            className="rounded-full h-[246px] w-[246px]"
+          />
+      
       </div>
       {!areAllExpEmpty && (
         <div className="flex flex-col border-b-2 pb-8 pt-8">
@@ -78,9 +82,7 @@ const Resume = () => {
                 </p>
               </div>
               <div className="mt-4">
-                <p>
-                 {edu?.description}
-                </p>
+                <p>{edu?.description}</p>
               </div>
             </div>
           ))}
