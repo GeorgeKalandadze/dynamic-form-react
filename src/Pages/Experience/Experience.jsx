@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react'
 import InputGroup from '../../Components/InputGroup';
 import TextareaGroup from '../../Components/TextareaGroup';
-import Dropdown from '../../Components/Dropdown';
 import { useGlobalContext } from '../../Context/Context';
 import { validateExperiences } from '../../Validation/Validation';
 import FormLayout from '../../Layouts/FormLayout';
+import {  useNavigate } from 'react-router-dom';
 
 const Experience = () => {
+  const navigate = useNavigate()
   const {
     setInfo,
     info,
@@ -40,9 +41,13 @@ const Experience = () => {
       ...prevErrors,
       experiences: errors,
     }));
-    validateExperiences(info.experiences);
+    const allFieldsValid = Object.values(errors).every((errorObj) =>
+      Object.values(errorObj).every((error) => error === "valid")
+    );
+    if(allFieldsValid){
+      navigate('/education')
+    }
   }
-
 
 
   return (

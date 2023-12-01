@@ -69,7 +69,7 @@ const Education = () => {
    }));
  };
 
- console.log("info", info);
+ console.log("info", validationErrors.educations);
 
   return (
     <FormLayout>

@@ -39,18 +39,18 @@ const InputGroup = ({
           className={inputClass}
           onChange={(event) => changeHandler(event)}
         />
-        <img
-          src={
-            validation === "valid"
-              ? SuccessIcon
-              : validation === "invalid"
-              ? ErrorIcon
-              : ""
-          }
-          className={`absolute top-3 ${
-            type === "date" ? "right-[-3.7%]" : "right-3"
-          }`}
-        />
+        {type !== "date" && (
+          <img
+            src={
+              validation === "valid"
+                ? SuccessIcon
+                : validation === "invalid"
+                ? ErrorIcon
+                : ""
+            }
+            className={"absolute top-3 right-3"}
+          />
+        )}
       </div>
       <p
         className={`font-small ${

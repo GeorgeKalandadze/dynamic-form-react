@@ -36,7 +36,11 @@ export const AppProvider = ({children}) => {
     const [info, setInfo] = useSessionStorage("resume-info", resumeInfo);
     const [validationErrors, setValidationErrors] = useSessionStorage(
       "errors",
-      {}
+      {
+        personal:{},
+        experiences:{},
+        educations:{},
+      }
     );
       
 
@@ -66,6 +70,38 @@ export const AppProvider = ({children}) => {
       }
     };
 
+    const formatPhoneNumber = (value) => {
+      if (!value) return value;
+
+      const phoneNumber = value.replace(/[^\d+]/g, "").slice(0, 13);
+      const phoneNumberLength = phoneNumber.length;
+
+      if (phoneNumberLength <= 3) {
+        return phoneNumber;
+      } else if (phoneNumberLength <= 6) {
+        return `${phoneNumber.slice(0, 4)} ${phoneNumber.slice(4)}`.trim();
+      } else if (phoneNumberLength <= 8) {
+        return `${phoneNumber.slice(0, 4)} ${phoneNumber.slice(
+          4,
+          7
+        )} ${phoneNumber.slice(7)}`.trim();
+      } else if (phoneNumberLength <= 10) {
+        return `${phoneNumber.slice(0, 4)} ${phoneNumber.slice(
+          4,
+          7
+        )} ${phoneNumber.slice(7, 9)} ${phoneNumber.slice(9)}`.trim();
+      } else {
+        return `${phoneNumber.slice(0, 4)} ${phoneNumber.slice(
+          4,
+          7
+        )} ${phoneNumber.slice(7, 9)} ${phoneNumber.slice(
+          9,
+          11
+        )} ${phoneNumber.slice(11)}`.trim();
+      }
+    };
+
+
      const handleChange = ( event ) => {
        const name = event.target.name;
        const value = event.target.value;
@@ -83,6 +119,7 @@ export const AppProvider = ({children}) => {
           setInfo,
           validationErrors,
           setValidationErrors,
+          formatPhoneNumber,
         }}
       >
         {children}

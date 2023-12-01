@@ -5,60 +5,90 @@ import TextareaGroup from "../../Components/TextareaGroup";
 import { useGlobalContext } from "../../Context/Context";
 import { validatePersonal } from "../../Validation/Validation";
 import FormLayout from "../../Layouts/FormLayout";
+import { useNavigate } from "react-router-dom";
 
 const Personal = () => {
-  const { info, setInfo, validationErrors, setValidationErrors } = useGlobalContext();
-  
+  const {
+    info,
+    setInfo,
+    validationErrors,
+    setValidationErrors,
+    formatPhoneNumber,
+  } = useGlobalContext();
+  const navigate = useNavigate()
+
+
   const validateForm = () => {
     const errors = validatePersonal(info);
-    setValidationErrors(errors);
+    setValidationErrors((prevErrors) => ({
+      ...prevErrors,
+      personal: errors,
+    }));
+     const isValidForm = Object.values(errors).every(
+       (error) => error === "valid"
+     );
+
+     if (isValidForm) {
+       navigate("/experience");
+     }
   };
 
-  const onSubmit = () => {
-    validateForm();
-  };
+ 
 
   const handleChange = (event) => {
     const { name, value, files } = event.target;
+    let formattedValue = value;
+
+    if (name === "phone_number") {
+      formattedValue = formatPhoneNumber(value);
+    }
 
     if (name === "image" && files && files[0]) {
       const selectedImage = files[0];
       const reader = new FileReader();
       reader.readAsDataURL(selectedImage);
       reader.onload = () => {
-      const dataUrl = reader.result;
-      setInfo((prevInfo) => ({
-        ...prevInfo,
-        image: dataUrl,
+        const dataUrl = reader.result;
+        setInfo((prevInfo) => ({
+          ...prevInfo,
+          image: dataUrl,
         }));
       };
-      
-
-      const errors = validatePersonal(
-        { ...info, [name]: value },
-        info.image
-      );
-      setValidationErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: errors[name],
-      }));
-    } else {
-      setInfo((prevInfo) => ({
-        ...prevInfo,
-        [name]: value,
-      }));
-
-      const errors = validatePersonal({ ...info, [name]: value }, info.image);
-      setValidationErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: errors[name],
-      }));
     }
+
+    const updatedInfo =
+      name === "image"
+        ? { ...info, image: formattedValue }
+        : { ...info, [name]: formattedValue };
+    const errors = validatePersonal(updatedInfo, info.image);
+
+    setInfo((prevInfo) => ({
+      ...prevInfo,
+      ...(name === "image"
+        ? { image: formattedValue }
+        : { [name]: formattedValue }),
+    }));
+
+    setValidationErrors((prevErrors) => ({
+      ...prevErrors,
+      personal: {
+        ...prevErrors.personal,
+        [name]: errors[name],
+      },
+    }));
   };
+
+   const onSubmit = (e) => {
+     e.preventDefault();
+     validateForm();
+     
+   };
+
+   console.log(validationErrors.personal);
 
   return (
     <FormLayout>
-      <div className="bg-white w-full ">
+      <form className="bg-white w-full " onSubmit={onSubmit}>
         <div className="bg-[#f9f9f9] py-[20px] px-[30px] w-full h-full  flex flex-col gap-8">
           <InputGroup
             name="name"
@@ -67,7 +97,7 @@ const Personal = () => {
             hint="მინიმუმ 2 ასო, ქართული ასოები"
             value={info.name}
             changeHandler={handleChange}
-            validation={validationErrors.name}
+            validation={validationErrors?.personal?.name}
           />
           <InputGroup
             name="surname"
@@ -76,12 +106,14 @@ const Personal = () => {
             hint="მინიმუმ 2 ასო, ქართული ასოები"
             value={info.surname}
             changeHandler={handleChange}
-            validation={validationErrors.surname}
+            validation={validationErrors?.personal?.surname}
           />
           <div className="flex gap-16 items-center relative py-10">
             <p
               className={`font-semibold text-lg ${
-                validationErrors.image === "invalid" ? "text-red-500" : ""
+                validationErrors?.personal?.image === "invalid"
+                  ? "text-red-500"
+                  : ""
               }`}
             >
               პირადი ფოტოს ატვირთვა
@@ -112,7 +144,7 @@ const Personal = () => {
             hint="უნდა მთავრდებოდეს @redberry.ge-ით"
             value={info.email}
             changeHandler={handleChange}
-            validation={validationErrors.email}
+            validation={validationErrors?.personal?.email}
           />
           <InputGroup
             name="phone_number"
@@ -121,18 +153,18 @@ const Personal = () => {
             hint="უნდა აკმაყოფილებდეს ქართული მობილურის ნომრის ფორმატს"
             value={info.phone_number}
             changeHandler={handleChange}
-            validation={validationErrors.phone_number}
+            validation={validationErrors?.personal?.phone_number}
           />
           <div className="flex justify-end">
             <button
               className="bg-[#6b40e3] rounded text-white px-4 py-3"
-              onClick={onSubmit}
+              type="submit"
             >
               Submit
             </button>
           </div>
         </div>
-      </div>
+      </form>
     </FormLayout>
   );
 };
