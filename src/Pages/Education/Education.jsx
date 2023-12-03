@@ -73,7 +73,7 @@ const Education = () => {
 
   return (
     <FormLayout>
-      <div className="bg-white ">
+      <div className="bg-white scroll-container">
         <div className=" bg-[#f9f9f9] py-[20px] px-[30px] w-full h-full rounded flex flex-col gap-8">
           {info.educations.map((x, i) => (
             <div className="flex flex-col gap-8">

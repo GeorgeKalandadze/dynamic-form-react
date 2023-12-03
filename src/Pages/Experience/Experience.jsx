@@ -33,9 +33,9 @@ const Experience = () => {
       experiences: errors,
     }));
   };
+  
 
   const onSubmit = () => {
-    
     const errors = validateExperiences(info.experiences);
     setValidationErrors((prevErrors) => ({
       ...prevErrors,
@@ -52,8 +52,8 @@ const Experience = () => {
 
   return (
     <FormLayout>
-      <div className="bg-white ">
-        <div className=" bg-[#f9f9f9] py-[20px] px-[30px] w-full h-full rounded flex flex-col gap-8">
+      <div className="bg-white">
+        <div className=" bg-[#f9f9f9] py-[20px] px-[30px] w-full h-full rounded flex flex-col gap-8 scroll-container">
           {info.experiences.map((x, i) => (
             <div className="flex flex-col gap-8">
               <InputGroup
