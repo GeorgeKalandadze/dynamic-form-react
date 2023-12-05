@@ -79,7 +79,7 @@ export const AppProvider = ({children}) => {
       if (phoneNumberLength <= 3) {
         return phoneNumber;
       } else if (phoneNumberLength <= 6) {
-        return `${phoneNumber.slice(0, 4)} ${phoneNumber.slice(4)}`.trim();
+        return `${phoneNumber.slice(0, 4)} ${phoneNumber.slice(4)}`;
       } else if (phoneNumberLength <= 8) {
         return `${phoneNumber.slice(0, 4)} ${phoneNumber.slice(
           4,

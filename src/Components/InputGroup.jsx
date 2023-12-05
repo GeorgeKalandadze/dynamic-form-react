@@ -12,6 +12,7 @@ const InputGroup = ({
   hint,
   changeHandler,
   validation,
+  focusHandler
 }) => {
 
    const inputClass = `outline-none py-3 rounded px-3 w-full ${
@@ -39,6 +40,7 @@ const InputGroup = ({
           value={value}
           className={inputClass}
           onChange={(event) => changeHandler(event)}
+          onFocus={focusHandler}
         />
         {type !== "date" && (
           <img

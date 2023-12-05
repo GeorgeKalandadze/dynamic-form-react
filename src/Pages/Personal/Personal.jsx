@@ -35,38 +35,66 @@ const Personal = () => {
 
  
 
+  // const handleChange = (event) => {
+  //   const { name, value, files } = event.target;
+  //   let formattedValue = value;
+
+  //   if (name === "phone_number") {
+  //     formattedValue = formatPhoneNumber(value);
+  //   }
+
+  //   if (name === "image" && files && files[0]) {
+  //     const selectedImage = files[0];
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(selectedImage);
+  //     reader.onload = () => {
+  //       const dataUrl = reader.result;
+  //       setInfo((prevInfo) => ({
+  //         ...prevInfo,
+  //         image: dataUrl,
+  //       }));
+  //     };
+  //   }
+  //   const updatedInfo =
+  //     name === "image"
+  //       ? { ...info, image: formattedValue }
+  //       : { ...info, [name]: formattedValue };
+  //   const errors = validatePersonal(updatedInfo, info.image);
+
+  //   setInfo((prevInfo) => ({
+  //     ...prevInfo,
+  //     ...(name === "image"
+  //       ? { image: formattedValue }
+  //       : { [name]: formattedValue }),
+  //   }));
+    
+  //   setValidationErrors((prevErrors) => ({
+  //     ...prevErrors,
+  //     personal: {
+  //       ...prevErrors.personal,
+  //       [name]: errors[name],
+  //     },
+  //   }));
+  // };
+
   const handleChange = (event) => {
-    const { name, value, files } = event.target;
+    const { name, value } = event.target;
     let formattedValue = value;
 
     if (name === "phone_number") {
       formattedValue = formatPhoneNumber(value);
     }
 
-    if (name === "image" && files && files[0]) {
-      const selectedImage = files[0];
-      const reader = new FileReader();
-      reader.readAsDataURL(selectedImage);
-      reader.onload = () => {
-        const dataUrl = reader.result;
-        setInfo((prevInfo) => ({
-          ...prevInfo,
-          image: dataUrl,
-        }));
-      };
-    }
+    const updatedInfo = {
+      ...info,
+      [name]: formattedValue,
+    };
 
-    const updatedInfo =
-      name === "image"
-        ? { ...info, image: formattedValue }
-        : { ...info, [name]: formattedValue };
     const errors = validatePersonal(updatedInfo, info.image);
 
     setInfo((prevInfo) => ({
       ...prevInfo,
-      ...(name === "image"
-        ? { image: formattedValue }
-        : { [name]: formattedValue }),
+      [name]: formattedValue,
     }));
 
     setValidationErrors((prevErrors) => ({
@@ -78,17 +106,60 @@ const Personal = () => {
     }));
   };
 
+
+  const handleImageUpload = (event) => {
+    const { files } = event.target;
+
+    if (files && files[0]) {
+      const selectedImage = files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const dataUrl = reader.result;
+        setInfo((prevInfo) => ({
+          ...prevInfo,
+          image: dataUrl,
+        }));
+
+        const updatedInfo = {
+          ...info,
+          image: dataUrl,
+        };
+
+        const errors = validatePersonal(updatedInfo, dataUrl);
+
+        setValidationErrors((prevErrors) => ({
+          ...prevErrors,
+          personal: {
+            ...prevErrors.personal,
+            image: errors.image,
+          },
+        }));
+      };
+
+      reader.readAsDataURL(selectedImage);
+    }
+  };
+
+
    const onSubmit = (e) => {
      e.preventDefault();
      validateForm();
-     
    };
 
-   console.log(validationErrors.personal);
+
+   const focusHandler = () => {
+     if (!info.phone_number.startsWith("+995")) {
+       setInfo((prevInfo) => ({
+         ...prevInfo,
+         phone_number: "+995" + (info.phone_number || ""),
+       }));
+     }
+   };
 
   return (
     <FormLayout>
-      <form className="bg-white w-full " onSubmit={onSubmit}>
+      <form className="bg-white w-full scroll-container" onSubmit={onSubmit}>
         <div className="bg-[#f9f9f9] py-[20px] px-[30px] w-full h-full  flex flex-col gap-8">
           <InputGroup
             name="name"
@@ -123,7 +194,7 @@ const Personal = () => {
                 type="file"
                 name="image"
                 className="cursor-pointer absolute top-0 left-0 w-full h-full opacity-0"
-                onChange={handleChange}
+                onChange={handleImageUpload}
               />
               <button className="cursor-pointer bg-[#0e80bf] text-white px-4 py-3 rounded max-w-full text-sm">
                 ატვირთვა
@@ -153,6 +224,7 @@ const Personal = () => {
             hint="უნდა აკმაყოფილებდეს ქართული მობილურის ნომრის ფორმატს"
             value={info.phone_number}
             changeHandler={handleChange}
+            focusHandler={focusHandler}
             validation={validationErrors?.personal?.phone_number}
           />
           <div className="flex justify-end">
